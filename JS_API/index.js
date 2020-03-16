@@ -375,6 +375,35 @@ app.put('/api/v1/addTrunk', async (req, res) => {
     }
   });
 
+  app.get('/api/v1/reloadSIPInterface', async (req, res) => {
+    const axios = require('axios');
+    try {
+      axios.get('http://127.0.0.1:8080/webapi/reload?%20mod_sofia', {
+        auth: {
+          username: 'freeswitch',
+          password: 'works'
+        },
+      })
+      .then(response => {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('X-Powered-By', 'Dzinga API')
+        res.setHeader('User-Agent', 'Dzinga API')
+        res.status(200).json({message: "Success"})
+      })
+      .catch(error => {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('X-Powered-By', 'Dzinga API')
+        res.setHeader('User-Agent', 'Dzinga API')
+        res.status(500).json({message: "Internal server error"})
+      });
+    } catch (error) {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('X-Powered-By', 'Dzinga API')
+      res.setHeader('User-Agent', 'Dzinga API')
+      res.status(500).json({message: "Internal server error"})
+    }
+  });
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
 })
